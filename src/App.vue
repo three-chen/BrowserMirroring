@@ -1,34 +1,11 @@
 <script setup>
-import MirrorHeader from '@/pages/MirrorHeader.vue';
-import MirrorContainer from '@/pages/MirrorContainer.vue'
-import { SkyRTC } from '@/modules/skyRTC'
-import { useLanguageJsonStore } from '@/stores/languageJson'
-var rtc = new SkyRTC();
+import { initMixin } from '@/modules/initMixin';
+import { SkyRTC } from '@/modules/skyRTC';
+import { useLanguageJsonStore } from '@/stores/languageJson';
+import { chooseLanguage } from '@/utils/languageUrl';
+import MirrorContainer from '@/views/MirrorContainer.vue';
+import MirrorHeader from '@/views/MirrorHeader.vue';
 
-function chooseLanguage() {
-  const userLang = navigator.language || navigator.userLanguage;
-  let language_url = "";
-  let base_url = "./assets/language/index";
-  const str = userLang.substr(0, 2);
-  const supportedLanguage = ["en", "ar", "cs", "da", "de", "el", "es", "fa", "fi", "fr", "he", "hi", "hu", "id", "is", "it", "ja", "kk", "km", "ko", "ky", "lo", "ml", "mn", "ms", "my", "nb", "ne", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sv", "th", "tr", "uk", "vi", "zh"]
-  if (str !== "zh") {
-    language_url = supportedLanguage.indexOf(str) > -1 ? str : "en";
-    if (language_url !== 'en') {
-      language_url = base_url + "-" + str + ".json";
-    } else {
-      language_url = base_url + ".json";
-    }
-  } else {
-    if (userLang === "zh-CN") {
-      language_url = base_url + "-zh-Hans.json";
-    } else if (userLang === "zh-TW") {
-      language_url = base_url + "-zh-Hant.json";
-    } else {
-      language_url = base_url + "-zh-Hans.json";
-    }
-  }
-  return language_url;
-}
 let language_url = chooseLanguage();
 // 动态导入json文件
 import(language_url).then(res => {
@@ -36,6 +13,15 @@ import(language_url).then(res => {
   const lang = useLanguageJsonStore();
   lang.setLanguageJson(res.default);
 });
+
+var rtc = new SkyRTC();
+initMixin(rtc);
+//连接WebSocket服务器
+try {
+  rtc.connect("ws:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
+} catch (error) {
+  console.log(error);
+}
 </script>
 
 <template>

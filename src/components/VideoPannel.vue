@@ -1,14 +1,78 @@
 <script setup>
-import { useLanguageJsonStore } from '../stores/languageJson';
+import { useLanguageJsonStore } from '@/stores/languageJson';
+import { ref } from 'vue';
 const lang = useLanguageJsonStore().store_language_json;
+
+//tooltip
+function showTooltip(event) {
+    event.target.lastElementChild.classList.remove("hideTooltip")
+    event.target.lastElementChild.classList.add("showTooltip");
+}
+function hideTooltip(event) {
+    event.target.lastElementChild.classList.remove("showTooltip")
+    event.target.lastElementChild.classList.add("hideTooltip");
+}
+
+// sound
+
+//关于全屏
+let fullscreenState = false;//初始没有全屏
+//全屏
+function myFullScreen() {
+    if (document.fullscreenEnabled) {
+        let ele = document.documentElement;
+        if (ele.requestFullscreen) {
+            ele.requestFullscreen();
+        } else if (ele.mozRequestFullScreen) {
+            ele.mozRequestFullScreen();
+        } else if (ele.webkitRequestFullScreen) {
+            ele.webkitRequestFullScreen();
+        }
+    } else {
+        console.log("fullscreen is not supported");
+    }
+}
+//退出全屏
+function myExitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+    }
+}
+//点击全屏按钮全屏，再点退出全屏
+function changeFullscreen(event) {
+    if (fullscreenState) {
+        myExitFullscreen();
+        fullscreenState = false;
+        event.target.firstElementChild.src = "./images/enterFullscreen.png";
+        event.target.lastElementChild.innerText = "Fullscreen";
+    } else {
+        myFullScreen();
+        fullscreenState = true;
+        event.target.firstElementChild.src = "./images/exitFullscreen.png";
+        event.target.lastElementChild.innerText = "Non-Fullscreen";
+    }
+}
+
+// shrink & expand
+const shrinkState = ref(false);
+function shrink() {
+    shrinkState.value = true;
+}
+function expand() {
+    shrinkState.value = false;
+}
 </script>
 
 <template>
-    <div id="videos">
-        <div id="pannel">
-            <div id="Sidebar">
+    <div id="pannel">
+        <div id="Sidebar">
+            <div v-show="!shrinkState">
                 <div class="icons">
-                    <div class="img_box" id="shrink" onmouseenter="showTooltip(this)" onmouseleave="hideTooltip(this)">
+                    <div class="img_box" id="shrink" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="shrink">
                         <img src="@/assets/images/shrink.png" alt="shrink">
                         <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_shrink_tooltip }}</div>
                     </div>
@@ -16,13 +80,15 @@ const lang = useLanguageJsonStore().store_language_json;
                 <div class="icons split"></div>
 
                 <div class="icons">
-                    <div class="disable" id="sound" onmouseenter="showTooltip(this)" onmouseleave="hideTooltip(this)">
+                    <div class="disable" id="sound" @mouseenter="showTooltip" @mouseleave="hideTooltip"
+                        @click="changeSound">
                         <img src="@/assets/images/sound_disable.png" alt="">
                         <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_sound_disable_tooltip }}</div>
                     </div>
                 </div>
                 <div class="icons">
-                    <div class="img_box" id="fullscreen" onmouseenter="showTooltip(this)" onmouseleave="hideTooltip(this)">
+                    <div class="img_box" id="fullscreen" @mouseenter="showTooltip" @mouseleave="hideTooltip"
+                        @click="changeFullscreen">
                         <img src="@/assets/images/enterFullscreen.png" alt="">
                         <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_enterFullscreen_tooltip }}
                         </div>
@@ -31,70 +97,30 @@ const lang = useLanguageJsonStore().store_language_json;
 
                 <div class="icons split"></div>
                 <div class="icons">
-                    <div class="img_box" id="endlink" onmouseenter="showTooltip(this)" onmouseleave="hideTooltip(this)">
+                    <div class="img_box" id="endlink" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="endlink">
                         <img src="@/assets/images/disconnect.png" alt="">
                         <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_endlink_tooltip }}</div>
                     </div>
                 </div>
-                <div class="icons" style="display: none;">
-                    <div class="img_box" id="expand" onmouseenter="showTooltip(this)" onmouseleave="hideTooltip(this)">
+            </div>
+            <div v-show="shrinkState">
+                <div class="icons">
+                    <div class="img_box" id="expand" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="expand">
                         <img src="@/assets/images/expand.png" alt="">
                         <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_expand_tooltip }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="sound_tips">
-            <span class="tips_text">{{ videos_sound_tips_tips_text }}</span>
-        </div>
     </div>
 </template>
 
 <style scoped>
-#videos {
-    width: 100%;
-    height: 100%;
-    padding-top: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #040108;
-}
-
-#videos video {
-    display: block;
-    margin: auto;
-    margin-top: 0;
-    z-index: 2;
-    max-width: 100vw;
-    max-height: 100%;
-    width: 100vw;
-    height: calc(100% - 10px);
-    object-fit: contain;
-}
-
 #pannel {
     z-index: 10;
     position: fixed;
     top: calc(50% - 80px);
     right: 0;
-    display: none;
-}
-
-#sound_tips {
-    position: absolute;
-    color: #152E42;
-    max-width: 320px;
-    border: 1px solid #000;
-    padding: 12px;
-    font-size: 14px;
-    color: #000;
-    top: calc(50% + 80px);
-    right: 64px;
-    box-sizing: border-box;
-    z-index: 5;
-    display: none;
-    background: #aab6c0;
 }
 
 #Sidebar {
