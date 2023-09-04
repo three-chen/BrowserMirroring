@@ -1,7 +1,12 @@
 <script setup>
 import { useLanguageJsonStore } from '@/stores/languageJson';
-import { ref } from 'vue';
+import { usePannelState } from '@/stores/pannelState';
+import { useVideoState } from '@/stores/videoState';
+import { useConfirmDialogState } from '@/stores/confirmDialogState';
 const lang = useLanguageJsonStore().store_language_json;
+const pannelState = usePannelState();
+const videoState = useVideoState();
+const confirmDialogState = useConfirmDialogState();
 
 //tooltip
 function showTooltip(event) {
@@ -14,9 +19,34 @@ function hideTooltip(event) {
 }
 
 // sound
+function changeSound() {
+    //没禁用状态
+    if (!pannelState.store_pannel_state.soundState.isDisable) {
+        videoState.store_video_state.opensound = !videoState.store_video_state.opensound;
+        if (videoState.store_video_state.opensound == true) {
+            pannelState.setPannelState("soundState", {
+                isDisable: false,
+                soundTooltip: "/images/open_sound.png",
+                soundImageUrl: lang.language_json.videos_Sidebar_sound_open_tooltip,
+            });
+
+            videoState.setVideoState("volume", 1);
+            videoState.setVideoState("muted", false);
+        }
+        else {
+            pannelState.setPannelState("soundState", {
+                isDisable: false,
+                soundTooltip: "/images/close_sound.png",
+                soundImageUrl: lang.language_json.videos_Sidebar_sound_close_tooltip,
+            });
+
+            videoState.setVideoState("volume", 0);
+            videoState.setVideoState("muted", true);
+        }
+    }
+}
 
 //关于全屏
-let fullscreenState = false;//初始没有全屏
 //全屏
 function myFullScreen() {
     if (document.fullscreenEnabled) {
@@ -43,70 +73,79 @@ function myExitFullscreen() {
     }
 }
 //点击全屏按钮全屏，再点退出全屏
-function changeFullscreen(event) {
-    if (fullscreenState) {
+function changeFullscreen() {
+    if (pannelState.store_pannel_state.fullscreenState.isFullscreen) {
         myExitFullscreen();
-        fullscreenState = false;
-        event.target.firstElementChild.src = "./images/enterFullscreen.png";
-        event.target.lastElementChild.innerText = "Fullscreen";
+        pannelState.setPannelState("fullscreenState", {
+            isFullscreen: false,
+            fullscreenImageUrl: "/images/enterFullscreen.png",
+            fullscreenTooltip: lang.language_json.videos_Sidebar_enterFullscreen_tooltip,
+        });
     } else {
         myFullScreen();
-        fullscreenState = true;
-        event.target.firstElementChild.src = "./images/exitFullscreen.png";
-        event.target.lastElementChild.innerText = "Non-Fullscreen";
+        pannelState.setPannelState("fullscreenState", {
+            isFullscreen: true,
+            fullscreenImageUrl: "/images/exitFullscreen.png",
+            fullscreenTooltip: lang.language_json.videos_Sidebar_exitFullscreen_tooltip,
+        });
     }
 }
 
+// endlink
+function endlink() {
+    // show ConfirmEndLink
+    confirmDialogState.setConfirmEndlinkState(true);
+}
+
 // shrink & expand
-const shrinkState = ref(false);
 function shrink() {
-    shrinkState.value = true;
+    pannelState.store_pannel_state.shrinkState = true;
 }
 function expand() {
-    shrinkState.value = false;
+    pannelState.store_pannel_state.shrinkState = false;
 }
 </script>
 
 <template>
     <div id="pannel">
         <div id="Sidebar">
-            <div v-show="!shrinkState">
+            <div v-show="!pannelState.store_pannel_state.shrinkState">
                 <div class="icons">
                     <div class="img_box" id="shrink" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="shrink">
-                        <img src="@/assets/images/shrink.png" alt="shrink">
+                        <img src="/images/shrink.png" alt="shrink">
                         <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_shrink_tooltip }}</div>
                     </div>
                 </div>
                 <div class="icons split"></div>
 
                 <div class="icons">
-                    <div class="disable" id="sound" @mouseenter="showTooltip" @mouseleave="hideTooltip"
-                        @click="changeSound">
-                        <img src="@/assets/images/sound_disable.png" alt="">
-                        <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_sound_disable_tooltip }}</div>
+                    <div :class="[pannelState.store_pannel_state.soundState.isDisable ? 'disable' : 'img_box']" id="sound"
+                        @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="changeSound">
+                        <img :src="pannelState.store_pannel_state.soundState.soundImageUrl" alt="">
+                        <div class="tooltip hideTooltip">{{ pannelState.store_pannel_state.soundState.soundTooltip }}</div>
                     </div>
                 </div>
                 <div class="icons">
                     <div class="img_box" id="fullscreen" @mouseenter="showTooltip" @mouseleave="hideTooltip"
                         @click="changeFullscreen">
-                        <img src="@/assets/images/enterFullscreen.png" alt="">
-                        <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_enterFullscreen_tooltip }}
-                        </div>
+                        <img :src="pannelState.store_pannel_state.fullscreenState.fullscreenImageUrl" alt="">
+                        <div class="tooltip hideTooltip">{{ pannelState.store_pannel_state.fullscreenState.fullscreenTooltip
+                        }}</div>
                     </div>
                 </div>
 
                 <div class="icons split"></div>
                 <div class="icons">
                     <div class="img_box" id="endlink" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="endlink">
-                        <img src="@/assets/images/disconnect.png" alt="">
+                        <img src="/images/disconnect.png" alt="">
                         <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_endlink_tooltip }}</div>
                     </div>
                 </div>
             </div>
-            <div v-show="shrinkState">
+            <div v-show="pannelState.store_pannel_state.shrinkState">
                 <div class="icons">
                     <div class="img_box" id="expand" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="expand">
-                        <img src="@/assets/images/expand.png" alt="">
+                        <img src="/images/expand.png" alt="">
                         <div class="tooltip hideTooltip">{{ lang.language_json.videos_Sidebar_expand_tooltip }}</div>
                     </div>
                 </div>

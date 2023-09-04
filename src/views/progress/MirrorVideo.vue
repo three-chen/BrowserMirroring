@@ -1,7 +1,10 @@
 <script setup>
 import VideoPannel from '@/components/VideoPannel.vue';
+import PauseMask from '@/components/PauseMask.vue';
 import { useLanguageJsonStore } from '@/stores/languageJson';
+import { useVideoState } from '@/stores/videoState';
 const lang = useLanguageJsonStore().store_language_json;
+const videoState = useVideoState().store_video_state;
 </script>
 
 <template>
@@ -10,6 +13,8 @@ const lang = useLanguageJsonStore().store_language_json;
         <div id="sound_tips">
             <span class="tips_text">{{ lang.language_json.videos_sound_tips_tips_text }}</span>
         </div>
+        <PauseMask v-show="videoState.pause"></PauseMask>
+        <video v-if="videoState.id"></video>
     </div>
 </template>
 

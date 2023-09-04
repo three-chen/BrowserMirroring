@@ -1,6 +1,6 @@
 <script setup>
-import ProgressContainer from '../../components/ProgressContainer.vue';
-import { useLanguageJsonStore } from '../../stores/languageJson';
+import ProgressContainer from '@/components/ProgressContainer.vue';
+import { useLanguageJsonStore } from '@/stores/languageJson';
 const lang = useLanguageJsonStore().store_language_json;
 
 </script>
@@ -9,14 +9,14 @@ const lang = useLanguageJsonStore().store_language_json;
     <ProgressContainer>
         <div id="progress_break">
             <div class="progress_tips">
-                <div style="display: flex;align-items: center;"> <img src="@/assets/images/!.png"
-                        style="height: 40px;width: auto;" alt="!"></div>
+                <div style="display: flex;align-items: center;"> <img src="/images/!.png" style="height: 40px;width: auto;"
+                        alt="!"></div>
                 <div style="margin-left:15px">{{ lang.language_json.progress_progress_break_progress_tips }}</div>
             </div>
             <div class="progress_des">
                 <div>{{ lang.language_json.progress_progress_break_progress_des }}</div>
             </div>
-            <div class="progress_img"><img src="@/assets/images/breaklink.png" alt="Connection break"></div>
+            <div class="progress_img"><img src="/images/breaklink.png" alt="Connection break"></div>
         </div>
     </ProgressContainer>
 </template>

@@ -1,20 +1,20 @@
 <script setup>
-import ProgressContainer from '../../components/ProgressContainer.vue';
-import { useLanguageJsonStore } from '../../stores/languageJson';
+import ProgressContainer from '@/components/ProgressContainer.vue';
+import { useLanguageJsonStore } from '@/stores/languageJson';
 const lang = useLanguageJsonStore().store_language_json;
 
 </script>
 
 <template>
     <ProgressContainer>
-        <div id="progress_success">
+        <div id="progress_reqPair">
             <div class="progress_tips">
                 <div>{{ lang.language_json.progress_progress_success_progress_tips }}</div>
             </div>
             <div class="progress_des">
                 <div>{{ lang.language_json.progress_progress_success_progress_des }}</div>
             </div>
-            <div class="progress_img"><img src="@/assets/images/asklink.png" alt="Connected"></div>
+            <div class="progress_img"><img src="/images/asklink.png" alt="Connected"></div>
         </div>
     </ProgressContainer>
 </template>
@@ -48,9 +48,5 @@ const lang = useLanguageJsonStore().store_language_json;
 .progress_img img {
     width: 160px;
     margin-right: 50px;
-}
-
-#progress_success {
-    display: block;
 }
 </style>

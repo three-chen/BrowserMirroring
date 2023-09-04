@@ -6,7 +6,7 @@ const router = createRouter({
         {
             path: '/',
             name: 'default',
-            component: () => import('@/views/progress/ConnectionSuccessful.vue'),
+            component: () => import('@/views/progress/MirrorVideo.vue'),
         },
         {
             path: '/break',
@@ -34,9 +34,9 @@ const router = createRouter({
             component: () => import('@/views/progress/ConnectionSuccessful.vue'),
         },
         {
-            path: '/stopped',
-            name: 'stopped',
-            component: () => import('@/views/progress/MirrorStopped.vue'),
+            path: '/close',
+            name: 'close',
+            component: () => import('@/views/progress/MirrorClose.vue'),
         },
         {
             path: '/mirror',

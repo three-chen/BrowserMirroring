@@ -1,3 +1,11 @@
+import pinia from '@/stores'
+import { useVideoState } from '@/stores/videoState';
+import { usePannelState } from '@/stores/pannelState';
+import { useConfirmDialogState } from '@/stores/confirmDialogState';
+const videoState = useVideoState(pinia);
+const pannelState = usePannelState();
+const confirmDialogState = useConfirmDialogState();
+
 function initMixin(rtc) {
     //成功创建WebSocket连接
     rtc.on("connected", function (socket) {
@@ -11,21 +19,21 @@ function initMixin(rtc) {
     //接收到其他用户的视频流
     rtc.on('pc_add_stream', function (stream, socketId) {
         if (!sessionStorage.getItem('socketId')) {
-
-            sessionStorage.setItem('socketId', 'true')
-            var newVideo = document.createElement("video");
-            id = socketId;
-            newVideo.setAttribute("class", "other");
-            newVideo.setAttribute("autoplay", "autoplay");
-            newVideo.muted = true
-            newVideo.setAttribute("playsinline", "");
-            newVideo.setAttribute("id", id);
-            videos.appendChild(newVideo);
+            const id = socketId;
+            sessionStorage.setItem('socketId', 'true');
+            let videoStateConfig = {
+                id: id,
+                class: "other",
+                autoplay: "autoplay",
+                volume: 0,
+                muted: true,
+                playsinline: "",
+                pause: false,
+                opensound: false,
+            }
             rtc.attachStream(stream, id);
-            videoElement = document.querySelector('video');
-            // 找到video后icons pannel 展示出来
-            pannel.style.display = 'block';
-            progress.style.display = 'none';
+            videoState.addVideoStateConfig(id, videoStateConfig);
+            // fix me progressState->mirror
         }
         else {
 
@@ -35,46 +43,45 @@ function initMixin(rtc) {
     rtc.on('open_audio', function (socketId, mute) {
         if (mute == 0) {
             if (!sessionStorage.getItem('soundPermission')) {
-                soundPermission.style.display = 'block';
+                // show soundPermission dialog
+                confirmDialogState.setConfirmSoundPerState(true);
             } else {
-                soundicon.className = "img_box";
-                soundicon.firstElementChild.src = './images/open_sound.png';
-                soundicon.lastElementChild.innerText = language_json.videos_Sidebar_sound_open_tooltip;
-                opensound = true;
-                videoElement.volume = 1;
-                videoElement.muted = false;
+                pannelState.setPannelState("soundState", {
+                    isDisable: false,
+                    soundTooltip: lang.language_json.videos_Sidebar_sound_open_tooltip,
+                    soundImageUrl: "/images/open_sound.png",
+                })
+
+                videoState.setVideoState(socketId, "opensound", true);
+                videoState.setVideoState(socketId, "volume", 1);
+                videoState.setVideoState(socketId, "muted", false);
             }
         }
         else if (mute == 1) {
-            soundicon.className = 'disable'
-            videoElement.mute = true;
-            videoElement.volume = 0;
-            opensound = false;
-            soundicon.firstElementChild.src = './images/sound_disable.png';
-            soundicon.lastElementChild.innerText = language_json.videos_Sidebar_sound_disable_tooltip;
+            pannelState.setPannelState("soundState", {
+                isDisable: true,
+                soundTooltip: lang.language_json.videos_Sidebar_sound_disable_tooltip,
+                soundImageUrl: "/images/sound_disable.png",
+            })
+
+            videoState.setVideoState(socketId, "opensound", false);
+            videoState.setVideoState(socketId, "volume", 0);
+            videoState.setVideoState(socketId, "muted", true);
         }
     });
     //接收到暂停请求
     rtc.on('pause', function (socketId, paused) {
         if (paused == 1) {
-            pause_mask.style.display = 'block'
+            videoState.setVideoState(socketId, "pause", true);
         }
         else if (paused == 0) {
-            pause_mask.style.display = 'none'
+            videoState.setVideoState(socketId, "pause", false);
         }
     });
     //接收到断开请求
     rtc.on('remove_peer', function (socketId) {
-        if (videoElement.id == socketId) {
-            pannel.style.display = 'none'
-            confirmEndLink.style.display = 'none'
-            progress.style.display = 'block';
-            progress_close.style.display = 'block'
-            progress_break.style.display = 'none'
-            progress_failed.style.display = 'none'
-            progress_success.style.display = 'none'
-            videos.removeChild(videoElement);
-        }
+        videoState.removeVideoStateConfig();
+        // fix me progressState->close
     });
 }
 

@@ -1,7 +1,7 @@
 function chooseLanguage() {
     const userLang = navigator.language || navigator.userLanguage;
     let language_url = "";
-    let base_url = "./assets/language/index";
+    let base_url = "/language/index";
     const str = userLang.substr(0, 2);
     const supportedLanguage = ["en", "ar", "cs", "da", "de", "el", "es", "fa", "fi", "fr", "he", "hi", "hu", "id", "is", "it", "ja", "kk", "km", "ko", "ky", "lo", "ml", "mn", "ms", "my", "nb", "ne", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sv", "th", "tr", "uk", "vi", "zh"]
     if (str !== "zh") {

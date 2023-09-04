@@ -12,23 +12,22 @@ if (location.host === "7.7.7.7:8000") {
 function toQrcode() {
     location.href = 'https://1001tvs.cn/b';
 }
-
 </script>
 
 <template>
     <ProgressContainer>
-        <div id="progress_failed">
+        <div id="progress_close">
             <div class="progress_tips">
-                <div style="margin-left:15px">{{ lang.language_json.progress_progress_failed_progress_tips }}
+                <div style="margin-left:15px">{{ lang.language_json.progress_progress_close_progress_tips }}
                 </div>
             </div>
             <div class="progress_des">
-                <div>{{ lang.language_json.progress_progress_failed_progress_des }}</div>
+                <div>{{ lang.language_json.progress_progress_close_progress_des }}</div>
             </div>
-            <div class="progress_img"><img src="/images/breaklink.png" alt="Connection failed"></div>
+            <div class="progress_img"><img src="/images/endlink.png" style="margin: 0;" alt="MIrroring END"></div>
             <div v-if="notTesla" class="refresh">
-                <div class="refresh_btn" @click="toQrcode">{{
-                    lang.language_json.progress_progress_failed_refresh_refresh_btn }}</div>
+                <div class="refresh_btn" @click="toQrcode">{{ lang.language_json.progress_progress_close_refresh_refresh_btn
+                }}</div>
             </div>
         </div>
     </ProgressContainer>

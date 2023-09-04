@@ -1,12 +1,12 @@
 <script setup>
-import { useLanguageJsonStore } from '../stores/languageJson';
+import { useLanguageJsonStore } from '@/stores/languageJson';
 const lang = useLanguageJsonStore().store_language_json;
 </script>
 
 <template>
     <div class="header">
         <div class="header_container">
-            <div class="header_icon"><img src="@/assets/images/LOGO.png" alt=""></div>
+            <div class="header_icon"><img src="/images/LOGO.png" alt=""></div>
             <div class="header_des">
                 <p>{{ lang.language_json.header_header_des_p1 }}</p>
                 <p style="margin:0 20px">{{ lang.language_json.header_header_des_p2 }}</p>

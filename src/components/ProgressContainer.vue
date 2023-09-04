@@ -29,7 +29,7 @@
 }
 
 .progress_area .progress_innerbox {
-    width: 620px;
+    width: 700px;
     border-radius: 20px;
     padding: 50px 50px 0 50px;
     border: 1px solid #FFF;
