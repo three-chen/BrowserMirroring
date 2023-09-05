@@ -1,10 +1,12 @@
 import pinia from '@/stores'
+import { useProgressState } from '@/stores/progressState';
 import { useVideoState } from '@/stores/videoState';
 import { usePannelState } from '@/stores/pannelState';
 import { useConfirmDialogState } from '@/stores/confirmDialogState';
 const videoState = useVideoState(pinia);
-const pannelState = usePannelState();
-const confirmDialogState = useConfirmDialogState();
+const progressState = useProgressState(pinia);
+const pannelState = usePannelState(pinia);
+const confirmDialogState = useConfirmDialogState(pinia);
 
 function initMixin(rtc) {
     //成功创建WebSocket连接
@@ -33,7 +35,7 @@ function initMixin(rtc) {
             }
             rtc.attachStream(stream, id);
             videoState.addVideoStateConfig(id, videoStateConfig);
-            // fix me progressState->mirror
+            progressState.setProgressState("mirror");
         }
         else {
 
@@ -81,7 +83,7 @@ function initMixin(rtc) {
     //接收到断开请求
     rtc.on('remove_peer', function (socketId) {
         videoState.removeVideoStateConfig();
-        // fix me progressState->close
+        progressState.setProgressState("close");
     });
 }
 

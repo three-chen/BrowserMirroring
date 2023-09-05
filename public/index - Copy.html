@@ -695,12 +695,12 @@
       myExitFullscreen();
       fullscreenState = false;
       fullscreenicon.firstElementChild.src = "./images/enterFullscreen.png";
-      fullscreenicon.lastElementChild.innerText = "Fullscreen";
+      fullscreenicon.lastElementChild.innerText = language_json.videos_Sidebar_enterFullscreen_tooltip;
     } else {
       myFullScreen();
       fullscreenState = true;
       fullscreenicon.firstElementChild.src = "./images/exitFullscreen.png";
-      fullscreenicon.lastElementChild.innerText = "Non-Fullscreen";
+      fullscreenicon.lastElementChild.innerText = language_json.videos_Sidebar_exitFullscreen_tooltip;
     }
   })
 

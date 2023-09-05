@@ -1,8 +1,10 @@
 <script setup>
-import ConfirmDialog from '@/components/ConfirmDialog.vue'
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
+import { useProgressState } from '@/stores/progressState';
 import { useLanguageJsonStore } from '@/stores/languageJson';
 import { useVideoState } from '@/stores/videoState';
 import { useConfirmDialogState } from '@/stores/confirmDialogState';
+const progressState = useProgressState();
 const lang = useLanguageJsonStore().store_language_json;
 const videoState = useVideoState();
 const confirmDialogState = useConfirmDialogState();
@@ -17,7 +19,7 @@ function yes() {
     confirmDialogState.setConfirmEndlinkState(false);
     videoState.removeVideoStateConfig();
     // fix me rtc.exit();
-    // fix me progressState->close
+    progressState.setProgressState("close");
 }
 </script>
 

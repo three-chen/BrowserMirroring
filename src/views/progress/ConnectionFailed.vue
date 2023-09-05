@@ -65,12 +65,12 @@ function toQrcode() {
     margin-right: 50px;
 }
 
-.progress .refresh {
+.refresh {
     display: flex;
     justify-content: center;
 }
 
-.progress .refresh .refresh_btn {
+.refresh .refresh_btn {
     width: 202px;
     height: 64px;
     border-radius: 50px;

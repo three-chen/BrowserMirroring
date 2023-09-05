@@ -9,44 +9,43 @@ const lang = useLanguageJsonStore().store_language_json;
     <ProgressContainer>
         <div id="progress_Connecting">
             <div class="progress_tips">
-                <div>{{ lang.language_json.progress_progress_success_progress_tips }}</div>
+                <div>发送端：XXX设备</div>
+                <div>接收端：XXX设备</div>
             </div>
             <div class="progress_des">
-                <div>{{ lang.language_json.progress_progress_success_progress_des }}</div>
+                <div>正在建立连接，请保持手机屏幕开启避免锁屏造成连接中断</div>
             </div>
-            <div class="progress_img"><img src="/images/asklink.png" alt="Connected"></div>
+            <div class="progress_img"><img src="/images/connecting.png" alt="Connecting"></div>
         </div>
     </ProgressContainer>
 </template>
 
 <style scoped>
 .progress_tips {
-    margin-top: 30px;
+    margin: 30px 50px 0 50px;
     color: #fff;
     font-size: 30px;
     font-weight: 700;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
 }
 
 .progress_des {
     font-size: 24px;
     color: #fff;
-    text-align: center;
-    margin-top: 40px;
+    margin: 40px 50px 0 50px;
 }
 
 .progress_img {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
-    margin-bottom: 50px;
+    margin-top: 75px;
+    margin-bottom: 70px;
 }
 
 .progress_img img {
-    width: 160px;
+    width: 60px;
     margin-right: 50px;
 }
 </style>

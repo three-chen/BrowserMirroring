@@ -6,7 +6,7 @@ const router = createRouter({
         {
             path: '/',
             name: 'default',
-            component: () => import('@/views/progress/MirrorVideo.vue'),
+            component: () => import('@/views/progress/ConnectionConnecting.vue'),
         },
         {
             path: '/break',

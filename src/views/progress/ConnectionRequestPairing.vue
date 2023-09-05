@@ -9,12 +9,17 @@ const lang = useLanguageJsonStore().store_language_json;
     <ProgressContainer>
         <div id="progress_reqPair">
             <div class="progress_tips">
-                <div>{{ lang.language_json.progress_progress_success_progress_tips }}</div>
+                <img class="tips_img" src="/images/message.png" alt="message">
+                <div class="tips_text">配对请求</div>
             </div>
             <div class="progress_des">
-                <div>{{ lang.language_json.progress_progress_success_progress_des }}</div>
+                <div>是否允许来自XXX设备的投屏共享？</div>
             </div>
-            <div class="progress_img"><img src="/images/asklink.png" alt="Connected"></div>
+
+            <div class="btn">
+                <div class="refuse">拒绝</div>
+                <div class="allow">允许</div>
+            </div>
         </div>
     </ProgressContainer>
 </template>
@@ -26,27 +31,53 @@ const lang = useLanguageJsonStore().store_language_json;
     font-size: 30px;
     font-weight: 700;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: center;
+}
+
+.tips_img {
+    margin: 7px 15px 0 40px;
+}
+
+.tips_text {
+    display: flex;
+    align-items: center;
 }
 
 .progress_des {
     font-size: 24px;
     color: #fff;
-    text-align: center;
-    margin-top: 40px;
+    margin: 40px 0 0 85px;
 }
 
-.progress_img {
+
+.btn {
     display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    margin-bottom: 50px;
+    justify-content: space-around;
 }
 
-.progress_img img {
-    width: 160px;
-    margin-right: 50px;
+.btn .refuse {
+    width: 170px;
+    height: 54px;
+    border-radius: 50px;
+    margin: 90px 0 70px 40px;
+    text-align: center;
+    color: #fff;
+    font-size: 25px;
+    line-height: 54px;
+    cursor: pointer;
+    background: #8D8B8B;
+}
+
+.btn .allow {
+    width: 170px;
+    height: 54px;
+    border-radius: 50px;
+    margin: 90px 40px 70px 0;
+    text-align: center;
+    color: #fff;
+    font-size: 25px;
+    line-height: 54px;
+    cursor: pointer;
+    background: linear-gradient(90deg, #D025A9 3.7%, #515AEE 100%);
 }
 </style>

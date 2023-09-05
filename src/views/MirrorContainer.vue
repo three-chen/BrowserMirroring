@@ -1,15 +1,16 @@
 <script setup>
+import router from '@/router'
 import { watch } from 'vue';
 import { useProgressState } from '@/stores/progressState';
 import { useConfirmDialogState } from '@/stores/confirmDialogState';
-import ConfirmEndLink from '../components/ConfirmEndLink.vue';
-import ConfirmSoundPermisson from '../components/ConfirmSoundPermisson.vue';
-const progressState = useProgressState().store_progress_state;
+import ConfirmEndLink from '@/components/ConfirmEndLink.vue';
+import ConfirmSoundPermisson from '@/components/ConfirmSoundPermisson.vue';
+const progressState = useProgressState();
 const confirmDialogState = useConfirmDialogState();
 
-watch(progressState.value, () => {
-    console.log(useProgressState().store_progress_state);
-    this.$router.push(`/${progressState.value}`);
+watch(progressState, () => {
+    let new_route = `/${progressState.store_progress_state}`;
+    router.push(new_route);
 });
 </script>
 
